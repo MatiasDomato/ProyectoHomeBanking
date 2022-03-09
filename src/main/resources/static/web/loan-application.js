@@ -114,7 +114,7 @@ var app6 = new Vue({
     interesMonto(parametro) {
       this.interesLoan = this.amount / this.payments;
       this.interesLoan = ((this.interesLoan * parametro) + (this.interesLoan)).toFixed(2)
-      this.interesTotal = this.interesLoan * this.payments
+      this.interesTotal = (this.interesLoan * this.payments).toFixed(2)
     },
   },
 });
