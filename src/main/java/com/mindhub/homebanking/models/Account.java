@@ -17,6 +17,8 @@ public class Account {
     private String number;
     private LocalDateTime creationDate;
     private double balance;
+    private Boolean active = true;
+    private AccountType accountType;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     Set<Transaction> transactions = new HashSet<>();
@@ -24,8 +26,6 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="client_id")
     private Client client;
-    private Boolean active = true;
-    private AccountType accountType;
 
     public Account() {
     }

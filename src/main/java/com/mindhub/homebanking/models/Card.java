@@ -21,13 +21,13 @@ public class Card {
     private int cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
-
+    private boolean active = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cardClient")
     private Client client;
 
-    private boolean active = true;
+
 
     public Card() {
     }

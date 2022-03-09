@@ -18,6 +18,7 @@ public class Loan {
 
     private String name;
     private Double maxAmount;
+    private Double interes;
 
     @ElementCollection
     @Column(name="payment_id")
@@ -26,7 +27,6 @@ public class Loan {
     @OneToMany(mappedBy="loan", fetch=FetchType.EAGER)
     private Set<ClientLoan> clientLoans = new HashSet<>();
 
-    private Double interes;
 
     public Loan() {
     }
