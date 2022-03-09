@@ -23,7 +23,24 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client saveClient(Client client) {
-        return null;
+        return clientRepository.save(client);
+    }
+
+    @Override
+    public ClientDTO getClient(Long id) {
+//        return clientRepository.findById(id).map(client -> new ClientDTO(client)).orElse(null);
+        ClientDTO clientDTO = new ClientDTO(clientRepository.findById(id).orElse(null));
+        return clientDTO;
+    }
+
+    @Override
+    public ClientDTO findByEmail(String email) {
+        return new ClientDTO(clientRepository.findByEmail(email));
+    }
+
+    @Override
+    public Client findClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
     }
 
 

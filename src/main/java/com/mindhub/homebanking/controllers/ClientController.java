@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ClientController {
 
-    @Autowired
-    private ClientRepository clientRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -42,14 +40,12 @@ public class ClientController {
 
     @GetMapping("clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        ClientDTO client = new ClientDTO(clientRepository.findById(id).orElse(null));
-        return client;
+       return clientService.getClient(id);
     }
 
     @GetMapping("/clients/current")
     public ClientDTO getCurrentClientDto (Authentication authentication) {
-        ClientDTO clientDTO = new ClientDTO(clientRepository.findByEmail(authentication.getName()));
-        return clientDTO;
+        return clientService.findByEmail(authentication.getName());
     }
 
 
@@ -80,12 +76,11 @@ public class ClientController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientService.findClientByEmail(email) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
         Client client1= new Client(firstName, lastName, email, passwordEncoder.encode(password));
-//        clientRepository.save(client1);
         clientService.saveClient(client1);
 
         Account account1 = new Account(vinNumberAccount, LocalDateTime.now(),0.0,client1, AccountType.AHORRO);
