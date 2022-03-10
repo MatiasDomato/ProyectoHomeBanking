@@ -48,20 +48,25 @@ public class TransactionController {
                                                 @RequestParam String sourceAccount, @RequestParam String destinationAccountNumber) {
 
         Account sourceAccounts = accountRepository.findByNumber(sourceAccount);
-        Account destinationAccountNumbers = accountRepository.findByNumber(destinationAccountNumber);
+        Account destinationAccount = accountRepository.findByNumber(destinationAccountNumber);
 
         Client client = clientRepository.findByEmail(authentication.getName());
         List<Account> clientAccount = client.getAccounts().stream().collect(Collectors.toList());
 
 
+        if (amount <= 0){
+            return new ResponseEntity<>("No se puede enviar monto menor o igual a 0", HttpStatus.FORBIDDEN);
+        }
+
+        if (sourceAccounts.getNumber() == destinationAccount.getNumber()){
+            return new ResponseEntity<>("No se puede enviar una transferencia a la misma cuenta", HttpStatus.FORBIDDEN);
+        }
+
         if (amount == null || description == null || sourceAccount == null || destinationAccountNumber == null) {
             return new ResponseEntity<>("Los parametros estan vacios", HttpStatus.FORBIDDEN);
         }
-        if (sourceAccount == destinationAccountNumber){
-            return new ResponseEntity<>("Los numeros de cuenta son iguales", HttpStatus.FORBIDDEN);
-        }
 
-        if (sourceAccounts == null || destinationAccountNumbers == null){
+        if (sourceAccounts == null || destinationAccount == null){
             return new ResponseEntity<>("No existe la cuenta de origen", HttpStatus.FORBIDDEN);
         }
 
@@ -69,7 +74,7 @@ public class TransactionController {
             return new ResponseEntity<>("No tiene permiso en la cuenta", HttpStatus.FORBIDDEN);
         }
 
-        if (destinationAccountNumbers == null){
+        if (destinationAccount == null){
             return new ResponseEntity<>("No existe la cuenta a la que quieres enviar la transaccion", HttpStatus.FORBIDDEN);
         }
 
@@ -81,14 +86,14 @@ public class TransactionController {
         Transaction transaction1 = new Transaction(TransactionType.DEBIT,amount,destinationAccountNumber+" "+description,LocalDateTime.now(),sourceAccounts);
         transactionRepository.save(transaction1);
 
-        Transaction transaction2 = new Transaction(TransactionType.CREDIT,amount,sourceAccount+" "+description,LocalDateTime.now(),destinationAccountNumbers);
+        Transaction transaction2 = new Transaction(TransactionType.CREDIT,amount,sourceAccount+" "+description,LocalDateTime.now(),destinationAccount);
         transactionRepository.save(transaction2);
 
         Double auxSourceAccount = sourceAccounts.getBalance() - amount;
-        Double auxdestinationAccountNumbers = destinationAccountNumbers.getBalance() + amount;
+        Double auxdestinationAccountNumbers = destinationAccount.getBalance() + amount;
 
         sourceAccounts.setBalance(auxSourceAccount);
-        destinationAccountNumbers.setBalance(auxdestinationAccountNumbers);
+        destinationAccount.setBalance(auxdestinationAccountNumbers);
 
         return new ResponseEntity<>("Se creo con exito",HttpStatus.CREATED);
     }

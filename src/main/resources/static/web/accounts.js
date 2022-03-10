@@ -2,7 +2,7 @@ var app2 = new Vue({
   el: "#app2",
   data: {
     client: {},
-    accounts: {},
+    accounts: [],
     loans: {},
     botonCuenta: true,
     accountsFilter:[],
@@ -25,12 +25,13 @@ var app2 = new Vue({
         this.accounts.sort((a, b) => a.id - b.id);
         this.loans.sort((a, b) => a.id - b.id);
 
-        this.botonCuenta = response.data.accounts;
 
         this.accountsFilter = this.accounts.filter(account => account.active == true)
         this.accountsFilterLength = this.accountsFilter.length
 
-        if (this.botonCuenta.length >= 3) {
+
+
+        if (this.accounts.length >= 3) {
           this.botonCuenta = false;
         }
 
