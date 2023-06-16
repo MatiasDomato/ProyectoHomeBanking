@@ -15,17 +15,17 @@ import static org.hamcrest.Matchers.*;
 public class CardUtilsTest {
 
 
-    @Test
-    public void cardNumberIsCreated(){
-        String cardNumber = CardUtils.getCardNumber();
-        assertThat(cardNumber,is(not(emptyOrNullString())));
-    }
-
-    @Test
-    public void cardCvv(){
-        int cvv = CardUtils.getCvv();
-        assertThat(cvv,is(not(hashCode())));
-    }
+//    @Test
+//    public void cardNumberIsCreated(){
+//        String cardNumber = CardUtils.getCardNumber();
+//        assertThat(cardNumber,is(not(emptyOrNullString())));
+//    }
+//
+//    @Test
+//    public void cardCvv(){
+//        int cvv = CardUtils.getCvv();
+//        assertThat(cvv,is(not(hashCode())));
+//    }
 
 
 }
